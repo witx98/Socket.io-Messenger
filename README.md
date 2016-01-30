@@ -1,5 +1,5 @@
 # Socket.Io-Messenger
-
+![Build Status](https://travis-ci.org/AlexTraher/Socket.Io-Messenger.svg?branch=master)
 A simple messaging app using Socket.io tutorial - http://socket.io/get-started/chat/
 
 ## Getting Started
