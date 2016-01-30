@@ -8,6 +8,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      width: 100%;
     }
     
     body {
@@ -15,25 +16,36 @@
     }
     
     form {
-      background: #000;
+      background: #314f7c;
       padding: 3px;
       position: fixed;
       bottom: 0;
       width: 100%;
+      margin-left: -1.2%;
     }
     
     form input {
       border: 0;
       padding: 10px;
       width: 80%;
-      margin-right: .5%;
+      margin-right: 2%;
+      margin-left: 2%;
+      border-radius: 2px;
     }
     
     form button {
       width: 9%;
-      background: rgb(130, 224, 255);
+      background: #ffb266;
+      color: #314f7c;
       border: none;
       padding: 10px;
+      border-radius: 2px;
+      font-weight: bold;
+      transition: 0.5s all;
+    }
+    
+    form button:hover {
+      background-color: #ffd9b3;
     }
     
     #messages {
