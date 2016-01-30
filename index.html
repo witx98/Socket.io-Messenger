@@ -2,30 +2,40 @@
 <html>
 
 <head>
-  <title>Socket.IO chat</title>
+  <title>Socket.io Chat </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
   <style>
     html {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       width: 100%;
+     -webkit-overflow-scrolling: touch;
     }
     
     body {
       font: 13px Helvetica, Arial;
+      color: #4d4d4d;
     }
     
-    form {
+    .add-msg-container {
       background: #314f7c;
-      padding: 3px;
+      padding-top: 10px;
+      width: 103%;
       position: fixed;
-      bottom: 0;
-      width: 100%;
-      margin-left: -1.2%;
+      top: 0;
+      left: 0;
+      height: 80px;
     }
+   
+   .messages-container {
+     height: 80%;
+     margin-top: 50px;
+   }
     
     form input {
-      border: 0;
+      border: 1px;
+      color:#314f7c;
       padding: 10px;
       width: 80%;
       margin-right: 2%;
@@ -34,7 +44,7 @@
     }
     
     form button {
-      width: 9%;
+      width: 65px;
       background: #ffb266;
       color: #314f7c;
       border: none;
@@ -52,37 +62,100 @@
       list-style-type: none;
       margin: 0;
       padding: 0;
+      overflow-y: scroll;
     }
     
     #messages li {
-      padding: 5px 10px;
+      padding: 10px 10px;
+      padding-top: 12px;
+      height: 20px;
     }
     
     #messages li:nth-child(odd) {
-      background: #eee;
+      background: #eeeeee;
+    }
+    
+    #messages li:first-child {
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+    }
+    
+    #messages li:last-child {
+      border-bottom-right-radius: 2px;
+      border-bottom-left-radius: 2px;
+    }
+    
+    .user-typing-info {
+      color: #eeeeee;
+      font-weight: bold;
+      margin-left: 2%;
+      width: 50%;
+      display: inline-block;
+    }
+    
+    .username-input {
+      width: 164px;
+      display: inline-block;
+    }
+    
+    .username-btn {
+      width: 101px;
     }
   </style>
 </head>
 
 <body>
-  <ul id="messages"></ul>
-  <form action="">
-    <input id="m" autocomplete="off" />
-    <button>Send</button>
-  </form>
+  <div class="add-msg-container">
+    <form action="" class="add-msg-form">
+      <input id="m" autocomplete="off" placeholder="Type a message..."/>
+      <button>Send</button><br/>
+    </form>
+    
+    <form action="" class="choose-name-form">
+      <p class="user-typing-info"></p>
+      <input 
+        class="username-input" 
+        autocomplete="off" 
+        placeholder="Choose a username"/>
+        <button class="username-btn">Add username</button>
+    </form>
+  </div>
+  <div class="messages-container">
+    <ul id="messages"></ul>
+  </div>
   <script src="socket.io/socket.io.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
     var socket = io();
-    $('form').submit(function () {
+    var username = '';
+    $('.add-msg-form').submit(function () {
 
-      socket.emit('chat message', $('#m').val());
+      //emit there is a new chat message
+      socket.emit('chat message', {user: (username || 'Anon'), message: $('#m').val()});
+      //empty the message box
       $('#m').val('');
+      
+      //remove info that defines if the user is typing
+      $('.user-typing-info').text('');
       return false;
     });
     
+    $('.choose-name-form').submit(function(event) {
+      event.preventDefault();
+      username = $('.username-input').val() || username;
+      $('.username-input').val('');
+    });
+    
+    $('#m').keydown(function () {
+      socket.emit('typing', (username || 'Anon'));
+    });
+    
     socket.on('chat message', function (msg) {
-      $('#messages').append($('<li>').text(msg));
+      $('#messages').append($('<li>').text(msg.user + ': ' + msg.message));
+    });
+    
+    socket.on('userTyping', function (name) {
+      $('.user-typing-info').text(name + ' is typing...');
     });
   </script>
 </body>
