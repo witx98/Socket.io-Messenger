@@ -25,12 +25,13 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 80px;
+      height: 20%;
     }
    
    .messages-container {
      height: 80%;
-     margin-top: 50px;
+     margin-top: 24%;
+     width: 100%;
    }
     
     form input {
@@ -129,14 +130,13 @@
     var socket = io();
     var username = '';
     $('.add-msg-form').submit(function () {
+      if ($('#m').val()) {
+        //emit there is a new chat message
+        socket.emit('chat message', {user: (username || 'Anon'), message: $('#m').val()});
+        //empty the message box
+        $('#m').val('');
+      }
 
-      //emit there is a new chat message
-      socket.emit('chat message', {user: (username || 'Anon'), message: $('#m').val()});
-      //empty the message box
-      $('#m').val('');
-      
-      //remove info that defines if the user is typing
-      $('.user-typing-info').text('');
       return false;
     });
     
@@ -146,8 +146,13 @@
       $('.username-input').val('');
     });
     
-    $('#m').keydown(function () {
-      socket.emit('typing', (username || 'Anon'));
+    $('#m').keyup(function () {
+      if($('#m').val) {
+        socket.emit('typing', (username || 'Anon'));
+      } else {
+        //remove info that defines if the user is typing
+        $('.user-typing-info').text('');
+      }
     });
     
     socket.on('chat message', function (msg) {
