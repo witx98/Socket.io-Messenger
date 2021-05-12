@@ -8,7 +8,7 @@ pipeline{
 			steps {
 				echo 'Building'
 				sh 'git pull origin master'
-				sh 'npm install'
+				//sh 'npm install'
 			}
 			post{
 				always{
@@ -25,7 +25,7 @@ pipeline{
 		stage('Test') {
 			steps {
 				echo 'Testing'
-				sh 'npm run testF'
+				sh 'npm run test'
 			}
 			post{
 				always{
