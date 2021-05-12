@@ -9,7 +9,6 @@ pipeline{
 				echo 'Building'
 				sh 'git pull origin master'
 				sh 'npm install'
-				error("Build purposely failed")
 			}
 			post{
 				always{
