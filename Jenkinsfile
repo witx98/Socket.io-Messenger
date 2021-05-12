@@ -9,7 +9,7 @@ pipeline{
 				echo 'Building'
 				sh 'git pull origin master'
 				sh 'npm install'
-				${currentBuild.result='UNSTABLE'}
+				error("Build purposely failed")
 			}
 			post{
 				always{
