@@ -40,6 +40,9 @@ pipeline{
 			}
 		}
 		stage('Deploy') {
+			steps {
+				ehco 'Deploy'
+			}
 		}
 	}
 }
